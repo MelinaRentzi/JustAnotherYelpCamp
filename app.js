@@ -1,38 +1,15 @@
 var express = require("express"),
     app = express(),
     bodyParser = require("body-parser"),
-    mongoose = require("mongoose")
+    mongoose = require("mongoose"),
+    Campground = require("./models/campground"),
+    seedDB = require("./seeds")
 
 mongoose.connect("mongodb://localhost/yelp_camp");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
+seedDB();
 
-// Schema setup
-
-var campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
-
-var Campground = mongoose.model("Campground", campgroundSchema);
-
-// Campground.create({ name: "Mounts", image: "https://upload.wikimedia.org/wikipedia/commons/f/fe/Camp_4.jpg", description: "This is a huge tent" }, function(err, campground) {
-//     if (err) {
-//         console.log(err);
-//     }
-//     else {
-//         console.log("NEWLY CREATED CAMPGROUND: ");
-//         console.log(campground);
-//     }
-// });
-
-// var campgrounds = [
-//     { name: "Salo", image: "https://upload.wikimedia.org/wikipedia/commons/f/fe/Camp_4.jpg" },
-//     { name: "Mounts", image: "https://upload.wikimedia.org/wikipedia/commons/f/fe/Camp_4.jpg" },
-//     { name: "Mounts", image: "https://upload.wikimedia.org/wikipedia/commons/f/fe/Camp_4.jpg" },
-//     { name: "Mounts", image: "https://upload.wikimedia.org/wikipedia/commons/f/fe/Camp_4.jpg" }
-// ]
 
 app.get("/", function(req, res) {
     res.render("landing");
@@ -79,11 +56,12 @@ app.post("/campgrounds", function(req, res) {
 // SHOW - Shows more info about 1 campground
 app.get("/campgrounds/:id", function(req, res) {
     // find the campground with provided ID
-    Campground.findById(req.params.id, function(err, foundCampground) {
+    Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground) {
         if (err) {
             console.log(err);
         }
         else {
+            console.log(foundCampground);
             // render show template with that campground
             res.render("show", { campground: foundCampground });
         }
