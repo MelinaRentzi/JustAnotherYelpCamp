@@ -28,6 +28,13 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// middleware to add currentUser on all routes
+app.use(function(req, res, next) {
+    res.locals.currentUser = req.user;
+    next();
+});
+
+
 app.get("/", function(req, res) {
     res.render("landing");
 });
@@ -46,8 +53,8 @@ app.get("/campgrounds", function(req, res) {
 });
 
 // NEW - Show form to create new campground
-app.get("/campgrounds/new", function(req, res) {
-    res.render("campgrouds/new");
+app.get("/campgrounds/new", isLoggedIn, function(req, res) {
+    res.render("campgrounds/new");
 });
 
 //CREATE - Add new campground to DB
@@ -88,7 +95,7 @@ app.get("/campgrounds/:id", function(req, res) {
 // ===============================//
 // COMMENTS ROUTES
 // ===============================//
-app.get("/campgrounds/:id/comments/new", function(req, res) {
+app.get("/campgrounds/:id/comments/new", isLoggedIn, function(req, res) {
     // find campground by id
     Campground.findById(req.params.id, function(err, campground) {
         if (err) {
@@ -101,7 +108,10 @@ app.get("/campgrounds/:id/comments/new", function(req, res) {
     });
 });
 
-app.post("/campgrounds/:id/comments", function(req, res) {
+// create new comment
+// connect new comment to campground
+//redirect to campground show page
+app.post("/campgrounds/:id/comments", isLoggedIn, function(req, res) {
     //lookup campground using id
     Campground.findById(req.params.id, function(err, campground) {
         if (err) {
@@ -121,9 +131,7 @@ app.post("/campgrounds/:id/comments", function(req, res) {
             });
         }
     });
-    // create new comment
-    // connect new comment to campground
-    //redirect to campground show page
+
 });
 
 // =====================//
@@ -162,6 +170,21 @@ app.post("/login", passport.authenticate("local", {
 }), function(req, res) {
 
 });
+
+// handle logout logic
+app.get("/logout", function(req, res) {
+    req.logout();
+    res.redirect("/campgrounds");
+});
+
+//middleware
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login");
+}
+
 
 app.listen(process.env.PORT, process.env.IP, function() {
     console.log("The YelpCamp Server has started!");
