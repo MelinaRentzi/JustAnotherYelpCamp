@@ -16,8 +16,10 @@ var commentRoutes = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes = require("./routes/index");
 
-// mongoose.connect("mongodb://localhost/yelp_camp");
-mongoose.connect("mongodb://melina:rentzi92@ds121652.mlab.com:21652/justanotheryelpcamp");
+// This for cloud9
+mongoose.connect(process.env.DATABASEURL);
+// This for Heroku
+// mongoose.connect("mongodb://melina:rentzi92@ds121652.mlab.com:21652/justanotheryelpcamp");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
