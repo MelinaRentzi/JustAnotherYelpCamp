@@ -4,6 +4,7 @@ var express = require("express"),
     mongoose = require("mongoose"),
     flash = require("connect-flash"),
     passport = require("passport"),
+    cookieParser = require("cookie-parser"),
     LocalStrategy = require("passport-local"),
     methodOverride = require("method-override"),
     Campground = require("./models/campground"),
@@ -11,21 +12,25 @@ var express = require("express"),
     User = require("./models/user"),
     seedDB = require("./seeds")
 
+// configure dotenv
+require('dotenv').load();
+
 //requiring routes
 var commentRoutes = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes = require("./routes/index");
 
-// This for cloud9
-mongoose.connect(process.env.DATABASEURL);
-// This for Heroku
-// mongoose.connect("mongodb://melina:rentzi92@ds121652.mlab.com:21652/justanotheryelpcamp");
+var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp";
+mongoose.connect(url);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
+app.use(cookieParser('secret'));
+//require moment
+app.locals.moment = require('moment');
 // seedDB(); // Seed the DB
 
 // PASSPORT CONFIGURATION
