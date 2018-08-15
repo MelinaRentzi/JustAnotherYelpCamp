@@ -3,8 +3,17 @@ var router = express.Router();
 var Campground = require("../models/campground");
 var Comment = require("../models/comment");
 var middleware = require("../middleware");
-var geocoder = require('geocoder');
 var { isLoggedIn, checkUserCampground, checkUserComment, isAdmin, isSafe } = middleware; // destructuring assignment
+var NodeGeocoder = require("node-geocoder");
+
+var options = {
+    provider: "google",
+    httpAdapter: "https",
+    apiKey: process.env.GEOCODER_API_KEY,
+    formatter: null
+};
+
+var geocoder = NodeGeocoder(options);
 
 // Define escapeRegex function for search feature
 function escapeRegex(text) {
@@ -59,9 +68,9 @@ router.post("/", isLoggedIn, isSafe, function(req, res) {
             req.flash('error', 'Invalid address');
             return res.redirect('back');
         }
-        var lat = data.results[0].geometry.location.lat;
-        var lng = data.results[0].geometry.location.lng;
-        var location = data.results[0].formatted_address;
+        var lat = data[0].latitude;
+        var lng = data[0].longitude;
+        var location = data[0].formattedAddress;
         var newCampground = { name: name, image: image, description: desc, cost: cost, author: author, location: location, lat: lat, lng: lng };
         // Create a new campground and save to DB
         Campground.create(newCampground, function(err, newlyCreated) {
@@ -106,11 +115,14 @@ router.get("/:id/edit", isLoggedIn, checkUserCampground, function(req, res) {
 // PUT - updates campground in the database
 router.put("/:id", isSafe, function(req, res) {
     geocoder.geocode(req.body.location, function(err, data) {
-        var lat = data.results[0].geometry.location.lat;
-        var lng = data.results[0].geometry.location.lng;
-        var location = data.results[0].formatted_address;
-        var newData = { name: req.body.name, image: req.body.image, description: req.body.description, cost: req.body.cost, location: location, lat: lat, lng: lng };
-        Campground.findByIdAndUpdate(req.params.id, { $set: newData }, function(err, campground) {
+        if (err || !data.length) {
+            req.flash("error", "Invalid address");
+            return res.redirect("back");
+        }
+        req.body.campground.lat = data[0].latitude;
+        req.body.campground.lng = data[0].longitude;
+        req.body.campground.location = data[0].formattedAddress;
+        Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, campground) {
             if (err) {
                 req.flash("error", err.message);
                 res.redirect("back");
@@ -122,6 +134,7 @@ router.put("/:id", isSafe, function(req, res) {
         });
     });
 });
+
 
 // DELETE - removes campground and its comments from the database
 router.delete("/:id", isLoggedIn, checkUserCampground, function(req, res) {

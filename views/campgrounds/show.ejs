@@ -7,9 +7,9 @@
     <div class="card mb-3">
       <img class="card-img-top" src="<%= campground.image %>" alt="<%= campground.name %>">
       <div class="card-body">
-        <p class="float-right">
+        <h4 class="float-right">
           $<%= campground.cost %>/night
-        </p>
+        </h4>
         <h5 class="card-title"><%= campground.name %></h5>
         <p>
           <em>Submitted by: <%= campground.author.username %>, <%= moment(campground.createdAt).fromNow() %></em>
@@ -88,5 +88,5 @@
     });
   }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkG51lwJtDvYFKTBdRZlhzYg1D4QFsXPU&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=API_KEY_HERE&callback=initMap"></script>
 <% include ../partials/footer %>
