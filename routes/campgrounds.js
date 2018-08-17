@@ -53,7 +53,7 @@ router.get("/", function(req, res) {
 });
 
 //CREATE - add new campground to DB
-router.post("/", isLoggedIn, isSafe, function(req, res) {
+router.post("/", isLoggedIn, function(req, res) {
     // get data from form and add to campgrounds array
     var name = req.body.name;
     var image = req.body.image;
@@ -113,7 +113,7 @@ router.get("/:id/edit", isLoggedIn, checkUserCampground, function(req, res) {
 });
 
 // PUT - updates campground in the database
-router.put("/:id", isSafe, function(req, res) {
+router.put("/:id", function(req, res) {
     geocoder.geocode(req.body.location, function(err, data) {
         if (err || !data.length) {
             req.flash("error", "Invalid address");
