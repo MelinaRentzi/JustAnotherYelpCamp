@@ -1,6 +1,10 @@
 <% include ../partials/header %> 
 
-     <header class="jumbotron">
+     <% if(currentUser && currentUser.isAdmin) { %>
+     <h2>Logged in as an admin.</h2>
+     <% } %>
+    
+      <header class="jumbotron">
          <div class="container">
              <h1><span class="glyphicon glyphicon-tent"></span> Welcome To YelpCamp!</h1>
              <p>View our hand-picked campgrounds from all over the world</p>
