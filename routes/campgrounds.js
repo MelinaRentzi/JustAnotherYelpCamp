@@ -22,15 +22,19 @@ function escapeRegex(text) {
 
 //INDEX - show all campgrounds
 router.get("/", function(req, res) {
-    if (req.query.search && req.xhr) {
+    var noMatch = null;
+    if (req.query.search) {
         const regex = new RegExp(escapeRegex(req.query.search), 'gi');
-        // Get all campgrounds from DB
+        // Get all campgrounds from DB // Search campgrounds by name
         Campground.find({ name: regex }, function(err, allCampgrounds) {
             if (err) {
                 console.log(err);
             }
             else {
-                res.status(200).json(allCampgrounds);
+                if (allCampgrounds.length < 1) {
+                    noMatch = "No campgrounds found.";
+                }
+                res.render("campgrounds/index", { campgrounds: allCampgrounds, noMatch: noMatch });
             }
         });
     }
@@ -41,14 +45,9 @@ router.get("/", function(req, res) {
                 console.log(err);
             }
             else {
-                if (req.xhr) {
-                    res.json(allCampgrounds);
-                }
-                else {
-                    res.render("campgrounds/index", { campgrounds: allCampgrounds, page: 'campgrounds' });
-                }
+                res.render("campgrounds/index", { campgrounds: allCampgrounds, noMatch: noMatch });
             }
-        });
+        })
     }
 });
 
