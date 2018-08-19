@@ -78,7 +78,6 @@ router.post("/", isLoggedIn, function(req, res) {
             }
             else {
                 //redirect back to campgrounds page
-                console.log(newlyCreated);
                 res.redirect("/campgrounds");
             }
         });
@@ -99,7 +98,6 @@ router.get("/:id", function(req, res) {
             req.flash('error', 'Sorry, that campground does not exist!');
             return res.redirect('/campgrounds');
         }
-        console.log(foundCampground)
         //render show template with that campground
         res.render("campgrounds/show", { campground: foundCampground });
     });

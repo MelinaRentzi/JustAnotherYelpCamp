@@ -1,0 +1,42 @@
+<% include ../partials/header %>
+
+<div class="row">
+    <div class="col-md-4">
+        
+        <h1><%= user.firstName + " " + user.lastName %></h1>
+        <div class="thumbnail">
+        <img src="<%= user.avatar %>" alt="User Profile Image">
+        <div class="caption">
+            <a href="mailto: <%= user.email %>">
+            <%= user.email %>
+            </a>
+        </div>
+        </div>
+            <p>
+                <h3>About me</h3>
+        Carrot cake pastry chocolate ice cream liquorice. Wafer soufflé jelly beans pie marshmallow ice cream sweet roll pastry. Cake toffee gingerbread cheesecake toffee dessert. Icing donut marshmallow sweet roll cheesecake candy canes jelly beans. Macaroon jelly beans chocolate bar croissant tart biscuit halvah bear claw jelly beans. Liquorice gingerbread bear claw. Oat cake jelly beans sesame snaps pastry liquorice oat cake. Chocolate bar jelly-o marshmallow lemon drops wafer pie pastry cookie. Icing cake gingerbread marzipan cake tart. Jelly-o lemon drops toffee. Marzipan caramels macaroon danish marshmallow. Fruitcake soufflé sweet roll biscuit chocolate bar halvah halvah.
+        Apple pie icing pudding wafer. Toffee cotton candy cookie biscuit pie cotton candy. Lemon drops ice cream sweet marzipan cake. Tiramisu marzipan chupa chups pastry. Caramels tootsie roll tootsie roll dragée candy canes brownie gummi bears croissant lollipop. Gummi bears sweet jelly candy canes jelly beans croissant biscuit. Powder cake croissant candy canes pudding. Jujubes caramels carrot cake ice cream biscuit bonbon tootsie roll. Dessert lemon drops donut. Bear claw pastry toffee chocolate bar candy. Dragée sweet macaroon chocolate cake lemon drops ice cream toffee gummi bears. Marshmallow ice cream chocolate cake dessert candy canes dessert sweet. Cotton candy sweet roll marzipan dessert cookie sweet chocolate cake tiramisu. Toffee soufflé bonbon chocolate bar sugar plum dragée cake icing croissant.
+    </p>
+    </div>
+
+    <div class="col-md-4">
+        <h3><%= user.username %>'s Campgrounds</h3>
+        <ul>
+        <% campgrounds.forEach(function(campground) {%>
+            <li><a href="/campgrounds/<%= campground.id %>"><%= campground.name %></a></li>
+        <% }); %>
+        </ul>
+    </div>
+    
+    <div class="col-md-4">
+        <h3><%= user.username %>'s Comments</h3>
+        <ul> 
+        <% comments.forEach(function(comment) { %> 
+        <li> <%= comment.text %> </li> 
+        <% }); %> 
+        </ul>
+    </div>
+    
+</div>
+
+<% include ../partials/footer %>
