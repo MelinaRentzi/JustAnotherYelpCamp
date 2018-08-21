@@ -77,43 +77,45 @@ router.get("/", function(req, res) {
 
 //CREATE - add new campground to DB
 router.post("/", isLoggedIn, upload.single('image'), function(req, res) {
-  // get data from form and add to campgrounds array
-  var name = req.body.name;
-  var price = req.body.price;
-  var image = req.body.image;
-  var desc = req.body.description;
-  var author = {
-    id: req.user._id,
-    username: req.user.username
-  };
-  
-  geocoder.geocode(req.body.location, function (err, data) {
-    cloudinary.uploader.upload(req.file.path, function(result) {
-      // add cloudinary url for the image to the campground object under image property
-      image = result.secure_url;
- 
-      if (err || !data.length) {
-        req.flash('error', 'Invalid address');
-        return res.redirect('back');
-      }
-      
-      var lat = data[0].latitude;
-      var lng = data[0].longitude;
-      var location = data[0].formattedAddress;
-      var newCampground = {name: name, price: price, image: image, description: desc, author:author, location: location, lat: lat, lng: lng};
-      
-      // Create a new campground and save to DB
-      Campground.create(newCampground, function(err, newlyCreated){
-        if(err){
-          console.log(err);
-        } else {
-          //redirect back to campgrounds page
-          console.log(newlyCreated);
-          res.redirect("/campgrounds");
-        }
-      });
+    // get data from form and add to campgrounds array
+    var name = req.body.name;
+    var price = req.body.price;
+    var image = req.body.image;
+    var desc = req.body.description;
+    var author = {
+        id: req.user._id,
+        username: req.user.username
+    };
+
+    geocoder.geocode(req.body.location, function(err, data) {
+        cloudinary.uploader.upload(req.file.path, function(result) {
+            // add cloudinary url for the image to the campground object under image property
+            image = result.secure_url;
+
+            if (err || !data.length) {
+                req.flash('error', 'Invalid address');
+                console.log(err);
+                return res.redirect('back');
+            }
+
+            var lat = data[0].latitude;
+            var lng = data[0].longitude;
+            var location = data[0].formattedAddress;
+            var newCampground = { name: name, price: price, image: image, description: desc, author: author, location: location, lat: lat, lng: lng };
+
+            // Create a new campground and save to DB
+            Campground.create(newCampground, function(err, newlyCreated) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    //redirect back to campgrounds page
+                    console.log(newlyCreated);
+                    res.redirect("/campgrounds");
+                }
+            });
+        });
     });
-  });
 });
 
 //NEW - show form to create new campground
