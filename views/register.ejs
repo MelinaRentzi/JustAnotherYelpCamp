@@ -3,16 +3,34 @@
         <div class="col-md-12">
             <form class="form-signin" action="/register" method="POST">
               <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
-              
+              <div class="form-group">
               <label for="inputUsername" class="sr-only">Username</label>
               <input type="text" id="inputUsername" class="form-control" name="username" placeholder="Username" required autofocus>
-              
+              </div>
+              <div class="form-group">
               <label for="inputPassword" class="sr-only">Password</label>
               <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
-              
+              </div>
+              <div class="form-group">
+              <label for="inputFirstname" class="sr-only">First Name</label>
+              <input type="text" id="inputFirstname" class="form-control" name="firstName" placeholder="First Name">
+              </div>
+              <div class="form-group">
+              <label for="inputLastname" class="sr-only">Last Name</label>
+              <input type="text" id="inputLastname" class="form-control" name="lastName" placeholder="Last Name">
+              </div>
+              <div class="form-group">
+              <label for="inputEmail" class="sr-only">Email</label>
+              <input type="email" id="inputEmail" class="form-control" name="email" placeholder="example@hello.com">
+              </div>
+              <div class="form-group">
+              <label for="avatar" class="sr-only">Avatar</label>
+              <input type="text" id="avatar" class="form-control" name="avatar" placeholder="Avatar Image Url">
+              </div>
+              <div class="form-group">
               <label for="adminCode" class="sr-only">Admin Code</label>
               <input type="text" name = "adminCode" id = "adminCode" class="form-control" placeholder = "Admin Code">
-              
+              </div>
               <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
             </form>
             <div class="form-signin">

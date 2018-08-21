@@ -12,7 +12,7 @@
         </h4>
         <h5 class="card-title"><%= campground.name %></h5>
         <p>
-          <em>Submitted by: <%= campground.author.username %>, <%= moment(campground.createdAt).fromNow() %></em>
+          <em>Submitted by: <a href="/users/<%= campground.author.id %>"><%= campground.author.username %></a>, <%= moment(campground.createdAt).fromNow() %></em>
         </p>
         <hr>
         <p class="card-text"><%= campground.description %></p>
@@ -67,7 +67,7 @@
     var lng = <%= campground.lng %>;
     var center = {lat: lat, lng: lng };
     var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 8,
+        zoom: 4,
         center: center,
         scrollwheel: false
     });
@@ -88,5 +88,5 @@
     });
   }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=API_KEY_HERE&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAt9RFDnTvEgqnG0ejch9mysRMqvow6S7Q&callback=initMap"></script>
 <% include ../partials/footer %>
