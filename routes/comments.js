@@ -8,7 +8,6 @@ const { isLoggedIn, checkUserComment, isAdmin } = middleware;
 //Comments New
 router.get("/new", isLoggedIn, function(req, res) {
     // find campground by id
-    console.log(req.params.id);
     Campground.findById(req.params.id, function(err, campground) {
         if (err) {
             console.log(err);
@@ -48,8 +47,17 @@ router.post("/", isLoggedIn, function(req, res) {
     });
 });
 
+
 router.get("/:commentId/edit", isLoggedIn, checkUserComment, function(req, res) {
-    res.render("comments/edit", { campground_id: req.params.id, comment: req.comment });
+    // find campground by id
+    Comment.findById(req.params.commentId, function(err, comment) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.render("comments/edit", { campground_id: req.params.id, comment: comment });
+        }
+    })
 });
 
 router.put("/:commentId", isAdmin, function(req, res) {
@@ -63,6 +71,7 @@ router.put("/:commentId", isAdmin, function(req, res) {
         }
     });
 });
+
 
 router.delete("/:commentId", isLoggedIn, checkUserComment, function(req, res) {
     // find campground, remove comment from comments array, delete comment in db
@@ -88,5 +97,6 @@ router.delete("/:commentId", isLoggedIn, checkUserComment, function(req, res) {
         }
     });
 });
+
 
 module.exports = router;
