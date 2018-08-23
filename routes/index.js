@@ -204,14 +204,6 @@ router.get("/users/:id", function(req, res) {
             }
             res.render("users/show", { user: foundUser, campgrounds: campgrounds });
         });
-
-        Comment.find().where("author.id").equals(foundUser._id).exec(function(err, comments) {
-            if (err) {
-                req.flash("error", "Something went wrong.");
-                return res.redirect("/");
-            }
-            res.render("users/show", { user: foundUser, comments: comments });
-        });
     });
 });
 

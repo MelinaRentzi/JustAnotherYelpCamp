@@ -1,7 +1,6 @@
 <% include ../partials/header %>
 <div class="row">
   <div class="col-md-3">
-    <div id="map"></div>
   </div>
   <div class="col-md-9">
     <div class="card mb-3">
@@ -42,12 +41,12 @@
                 <div class="float-right">
                   <p><%= moment(comment.createdAt).fromNow() %></p>
                   
-                  <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
-                  <div class="float-right">
-                    <a href="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/edit" class="btn btn-sm btn-warning">EDIT</a>
-                    <form class="delete-form" action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
-                      <button class="btn btn-sm btn-danger">DELETE</button>
-                    </form>
+                   <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
+                  <div class="pull-right">
+                  <a href="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/edit" class="btn btn-xs btn-warning">EDIT</a>
+                  <form class="delete-form" action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                  <button class="btn btn-xs btn-danger">DELETE</button>
+                  </form>
                   </div>
                   <% } %>
                 </div>
@@ -60,33 +59,4 @@
     </div>
   </div>
 </div>
-</div>
-<script>
-  function initMap() {
-    var lat = <%= campground.lat %>;
-    var lng = <%= campground.lng %>;
-    var center = {lat: lat, lng: lng };
-    var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 4,
-        center: center,
-        scrollwheel: false
-    });
-    var contentString = `
-      <strong><%= campground.name %><br />
-      <%= campground.location %></strong>
-      <p><%= campground.description %></p>
-    `
-    var infowindow = new google.maps.InfoWindow({
-      content: contentString
-    });
-    var marker = new google.maps.Marker({
-        position: center,
-        map: map
-    });
-    marker.addListener('click', function() {
-      infowindow.open(map, marker);
-    });
-  }
-</script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAt9RFDnTvEgqnG0ejch9mysRMqvow6S7Q&callback=initMap"></script>
 <% include ../partials/footer %>
