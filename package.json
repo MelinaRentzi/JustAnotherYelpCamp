@@ -23,6 +23,8 @@
   "dependencies": {
     "async": "^2.6.1",
     "body-parser": "^1.18.3",
+    "bootstrap-rating": "0.0.1",
+    "bootstrap-rating-input": "^0.4.0",
     "cloudinary": "^1.11.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
